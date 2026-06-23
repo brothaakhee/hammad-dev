@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Hammad H.</title>
+<meta name="description" content="Senior software engineer. 14+ years shipping production systems. Python, systems, AI.">
+<meta property="og:title" content="Hammad H.">
+<meta property="og:description" content="Senior software engineer. 14+ years shipping production systems. Python, systems, AI.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23111'/%3E%3Ctext x='50' y='72' font-family='monospace' font-size='64' fill='%23fafafa' text-anchor='middle'%3Eh%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --fg: #16161a;
+    --muted: #6b6b73;
+    --rule: #e3e3df;
+    --link: #1d4ed8;
+    --sel: #d8e2ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d0f;
+      --fg: #e8e8e6;
+      --muted: #8a8a92;
+      --rule: #242428;
+      --link: #7aa2ff;
+      --sel: #243049;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.65 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--sel); }
+
+  main {
+    max-width: 39rem;
+    margin: 0 auto;
+    padding: clamp(3.5rem, 12vh, 8rem) 1.5rem 5rem;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--link) 35%, transparent);
+    transition: border-color .15s ease;
+  }
+  a:hover { border-bottom-color: var(--link); }
+
+  header { margin-bottom: 3.5rem; }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 .4rem;
+  }
+
+  .tagline {
+    color: var(--muted);
+    margin: 0;
+    max-width: 34rem;
+  }
+
+  section { margin: 0 0 3rem; }
+
+  h2 {
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    padding-bottom: .55rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  p { margin: 0 0 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  .lede { max-width: 36rem; }
+
+  /* projects */
+  .project { margin-bottom: 1.75rem; }
+  .project:last-child { margin-bottom: 0; }
+
+  .project .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .project .name { font-weight: 600; color: var(--fg); }
+  .project .status {
+    font-size: .72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    white-space: nowrap;
+  }
+  .project .desc { color: var(--fg); margin: .35rem 0 .3rem; }
+  .project .stack { color: var(--muted); font-size: .85rem; }
+
+  /* links list */
+  .links { list-style: none; padding: 0; margin: 0; }
+  .links li { margin-bottom: .55rem; }
+  .links li:last-child { margin-bottom: 0; }
+  .links .k {
+    display: inline-block;
+    width: 5rem;
+    color: var(--muted);
+  }
+  .arrow { color: var(--muted); font-size: .85em; }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: .8rem;
+  }
+
+  @media (max-width: 30rem) {
+    .links .k { display: block; width: auto; margin-bottom: .1rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Hammad H.</h1>
+    <p class="tagline">Senior dev, 14+ years. Python, systems, and AI. I build things that ship.</p>
+  </header>
+
+  <section>
+    <h2>Work</h2>
+    <p class="lede">Senior software engineer with 14+ years building and shipping production systems &mdash; across fintech, government, security, and startups. Deep in Python and Django: APIs, async workflows, data pipelines, the unglamorous parts that have to hold up.</p>
+    <p class="lede">Lately focused on LLM applications, retrieval, agents, and AI-assisted engineering. Known for shipping reliably under pressure.</p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="head">
+        <span class="name"><a href="https://telebrain.ai">TeleBrain.ai</a></span>
+        <span class="status">Live</span>
+      </div>
+      <p class="desc">A local-first knowledge base for your Telegram chats. Citation-backed search, topic synthesis, and a desktop app &mdash; your data stays on your machine.</p>
+      <p class="stack">Python &middot; SQLite/FTS &middot; FastAPI &middot; React &middot; Tauri</p>
+    </div>
+
+    <div class="project">
+      <div class="head">
+        <span class="name"><a href="https://snippai.dev">SnippAI</a></span>
+        <span class="status">Building</span>
+      </div>
+      <p class="desc">Screenshot straight into your running Claude Code session. A native macOS menu-bar app: capture a region, pick a live terminal session, and send image&nbsp;+&nbsp;message in one step &mdash; no alt-tab dance.</p>
+      <p class="stack">Swift &middot; AppKit/SwiftUI &middot; ScreenCaptureKit &middot; iTerm2 API</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Elsewhere</h2>
+    <ul class="links">
+      <li><span class="k">GitHub</span><a href="https://github.com/brothaakhee">github.com/brothaakhee</a> <span class="arrow">&#8599;</span></li>
+      <li><span class="k">X</span><a href="https://x.com/brothaakhee">@brothaakhee</a> <span class="arrow">&#8599;</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    Built by hand. No frameworks, no build step.
+  </footer>
+</main>
+</body>
+</html>
