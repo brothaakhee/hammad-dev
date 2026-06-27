@@ -65,6 +65,17 @@
 
   header { margin-bottom: 3.5rem; }
 
+  .avatar {
+    display: block;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    margin: 0 0 1.5rem;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    filter: grayscale(0.15);
+  }
+
   h1 {
     font-size: 1.5rem;
     font-weight: 600;
@@ -140,6 +151,7 @@
 <body>
 <main>
   <header>
+    <img class="avatar" src="avatar.jpg" alt="Hammad H." width="84" height="84" loading="lazy">
     <h1>Hammad H.</h1>
     <p class="tagline">senior dev, 14+ years. yelling into ether, building mysteriously. spent years mastering vim just to delegate to an LLM.</p>
     <nav class="socials">
@@ -174,6 +186,15 @@
       </div>
       <p class="desc">Screenshot straight into your running Claude Code session. A native macOS menu-bar app: capture a region, pick a live terminal session, and send image&nbsp;+&nbsp;message in one step &mdash; no alt-tab dance.</p>
       <p class="stack">Swift &middot; AppKit/SwiftUI &middot; ScreenCaptureKit &middot; iTerm2 API</p>
+    </div>
+
+    <div class="project">
+      <div class="head">
+        <span class="name">kiddyproof</span>
+        <span class="status">Coming soon</span>
+      </div>
+      <p class="desc">Hand the keyboard to a small child without touching your real work. One shortcut drops a transparent &ldquo;kid mode&rdquo; cage: your desktop stays visible and untouched, every keypress and click is swallowed before it reaches any app, and the input drives calm, glowing visual feedback instead. Only a deliberate parent gesture exits.</p>
+      <p class="stack">Swift &middot; AppKit &middot; CGEventTap &middot; Core Graphics</p>
     </div>
   </section>
 
