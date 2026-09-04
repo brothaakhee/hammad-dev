@@ -18,10 +18,11 @@
   :root {
     --bg: #f5f3ee;
     --fg: #33312b;
-    --muted: #837e74;
+    --muted: #6d685e;
     --rule: #e2ddd2;
     --link: #5a6f6b;
     --sel: #e0e6e2;
+    accent-color: var(--link);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -36,12 +37,13 @@
 
   * { box-sizing: border-box; }
 
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--rule) var(--bg); }
 
   body {
     margin: 0;
     background: var(--bg);
     color: var(--fg);
+    caret-color: var(--link);
     font: 15px/1.65 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -50,9 +52,9 @@
   ::selection { background: var(--sel); }
 
   main {
-    max-width: 39rem;
+    max-width: 44rem;
     margin: 0 auto;
-    padding: clamp(3.5rem, 12vh, 8rem) 1.5rem 5rem;
+    padding: clamp(2.25rem, 7vh, 4.5rem) 1.5rem 4rem;
   }
 
   a {
@@ -62,30 +64,39 @@
     transition: border-color .15s ease;
   }
   a:hover { border-bottom-color: var(--link); }
+  :focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 
-  header { margin-bottom: 3.5rem; }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    margin-bottom: 2.5rem;
+  }
 
   .avatar {
-    display: block;
-    width: 84px;
-    height: 84px;
+    flex: none;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    margin: 0 0 1.5rem;
     object-fit: cover;
     border: 1px solid var(--rule);
     filter: grayscale(0.15);
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: -0.01em;
-    margin: 0 0 .4rem;
+    margin: 0 0 .3rem;
   }
 
   .tagline {
     color: var(--muted);
-    margin: 0 0 1.1rem;
+    margin: 0 0 .6rem;
     max-width: 34rem;
   }
 
@@ -97,7 +108,8 @@
   }
   .socials a { display: inline-flex; align-items: baseline; gap: .25rem; }
 
-  section { margin: 0 0 3rem; }
+  section { margin: 0 0 2.5rem; }
+  section:last-of-type { margin-bottom: 0; }
 
   h2 {
     font-size: .72rem;
@@ -110,127 +122,271 @@
     border-bottom: 1px solid var(--rule);
   }
 
-  p { margin: 0 0 1rem; }
+  p { margin: 0 0 .8rem; }
   p:last-child { margin-bottom: 0; }
 
-  .lede { max-width: 36rem; }
+  .lede { max-width: 40rem; }
 
-  /* projects */
-  .project { margin-bottom: 1.75rem; }
-  .project:last-child { margin-bottom: 0; }
+  .arrow { color: var(--muted); font-size: .85em; }
 
-  .project .head {
+  /* ---- rolodex ---- */
+  .rolodex {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: 2.25rem;
+    align-items: start;
+  }
+
+  .drum-col { position: relative; }
+
+  .drum-scene {
+    position: relative;
+    height: 264px;
+    perspective: 1400px;
+    perspective-origin: 50% 50%;
+  }
+
+  /* selection window: the two hairlines the active card sits between */
+  .drum-scene::before,
+  .drum-scene::after {
+    content: "";
+    position: absolute;
+    left: -.25rem;
+    right: -.25rem;
+    top: 50%;
+    height: 1px;
+    background: var(--rule);
+    pointer-events: none;
+  }
+  .drum-scene::before { transform: translateY(-28px); }
+  .drum-scene::after  { transform: translateY(27px); }
+
+  .drum {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    transform-style: preserve-3d;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .drum.grabbing { cursor: grabbing; }
+  .drum:focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 6px;
+    border-radius: 4px;
+  }
+
+  .slat {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 40px;
+    margin-top: -20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 0 .25rem;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    color: var(--muted);
+    text-align: left;
+    backface-visibility: hidden;
+    transition: color .2s ease;
+    cursor: pointer;
+  }
+  html.js .slat { will-change: transform, opacity; }
+  .slat .slat-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (hover: hover) { .slat:hover { color: var(--fg); } }
+  .slat.front { color: var(--fg); font-weight: 600; }
+  .slat .slat-status {
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .drum-hint {
+    margin: .6rem .25rem 0;
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  /* no-JS: hide the wheel, panels stack like a plain list */
+  html:not(.js) .drum-col { display: none; }
+  html:not(.js) .rolodex { display: block; }
+  html:not(.js) .panel { margin-bottom: 1.75rem; }
+
+  html.js .panels {
+    position: relative;
+    overflow: hidden;
+    transition: height .28s cubic-bezier(.22,.61,.36,1);
+  }
+  html.js .panel {
+    position: absolute;
+    inset: 0 0 auto;
+    opacity: 0;
+    transform: translateY(5px);
+    pointer-events: none;
+    transition: opacity .28s cubic-bezier(.22,.61,.36,1), transform .28s cubic-bezier(.22,.61,.36,1);
+  }
+  html.js .panel.active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .panel .head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
   }
-  .project .name { font-weight: 600; color: var(--fg); }
-  .project .status {
+  .panel .name { font-weight: 600; color: var(--fg); }
+  .panel .status {
     font-size: .72rem;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: .1em;
     white-space: nowrap;
   }
-  .project .desc { color: var(--fg); margin: .35rem 0 .3rem; }
-  .project .stack { color: var(--muted); font-size: .85rem; }
-
-  .arrow { color: var(--muted); font-size: .85em; }
+  .panel .desc { color: var(--fg); margin: .45rem 0 .35rem; }
+  .panel .stack { color: var(--muted); font-size: .85rem; }
 
   footer {
-    margin-top: 4rem;
+    margin-top: 3.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--rule);
     color: var(--muted);
     font-size: .8rem;
   }
+
+  @media (max-width: 720px) {
+    header { gap: 1rem; }
+    .avatar { width: 60px; height: 60px; }
+    .rolodex { grid-template-columns: 1fr; gap: 1.25rem; }
+    .drum-scene { height: 216px; }
+  }
+
+  /* touch: let the page scroll over the drum; taps still pick */
+  .hint-coarse { display: none; }
+  @media (pointer: coarse) {
+    .drum { touch-action: pan-y; }
+    .hint-fine { display: none; }
+    .hint-coarse { display: inline; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slat, html.js .panel, html.js .panels, a { transition: none; }
+  }
 </style>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 <main>
   <header>
-    <img class="avatar" src="avatar.jpg" alt="Hammad H." width="84" height="84" loading="lazy">
-    <h1>Hammad H.</h1>
-    <p class="tagline">senior dev, 14+ years. yelling into ether, building mysteriously. spent years mastering vim just to delegate to an LLM.</p>
-    <nav class="socials">
-      <a href="https://github.com/brothaakhee">GitHub <span class="arrow">&#8599;</span></a>
-      <a href="https://x.com/brothaakhee">X <span class="arrow">&#8599;</span></a>
-    </nav>
+    <img class="avatar" src="avatar.jpg" alt="Hammad H." width="76" height="76">
+    <div>
+      <h1>Hammad H.</h1>
+      <p class="tagline">senior dev, 14+ years. yelling into ether, building mysteriously. spent years mastering vim just to delegate to an LLM.</p>
+      <nav class="socials">
+        <a href="https://github.com/brothaakhee">GitHub <span class="arrow">&#8599;</span></a>
+        <a href="https://x.com/brothaakhee">X <span class="arrow">&#8599;</span></a>
+      </nav>
+    </div>
   </header>
 
   <section>
     <h2>Work</h2>
-    <p class="lede">14+ years writing software, mostly Python and Django, across fintech, government, security, and a few startups. I just try to ship things that work and hold up.</p>
-    <p class="lede">These days I mostly live in the LLM world, working with harnesses, retrieval, and agentic loops, and putting together small tools when something annoys me enough to fix it.</p>
+    <p class="lede">14+ years writing software, mostly Python and Django, across fintech, government, security, and a few startups. I just try to ship things that work and hold up. These days I mostly live in the LLM world (harnesses, retrieval, agentic loops) and put together small tools when something annoys me enough to fix it.</p>
     <p class="lede">Some big projects in the pipeline. Hit me on X.</p>
   </section>
 
-  <section>
+  <section aria-label="Projects">
     <h2>Projects</h2>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://telebrain.ai">TeleBrain.ai</a></span>
-        <span class="status">Live</span>
+    <div class="rolodex" id="rolodex">
+      <div class="drum-col">
+        <div class="drum-scene">
+          <div class="drum" id="drum" role="listbox" tabindex="0" aria-label="Projects" aria-orientation="vertical"></div>
+        </div>
+        <p class="drum-hint" id="drum-hint" hidden><span class="hint-fine">drag, scroll, or arrow keys to spin</span><span class="hint-coarse">tap a name to spin the wheel</span></p>
       </div>
-      <p class="desc">A local-first knowledge base for your Telegram chats. Citation-backed search, topic synthesis, and a desktop app &mdash; your data stays on your machine.</p>
-      <p class="stack">Python &middot; SQLite/FTS &middot; FastAPI &middot; React &middot; Tauri</p>
-    </div>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://snippai.dev">SnippAI</a></span>
-        <span class="status">Live</span>
-      </div>
-      <p class="desc">Screenshot straight into your running Claude Code session. A native macOS menu-bar app: capture a region, pick a live terminal session, and send image&nbsp;+&nbsp;message in one step &mdash; no alt-tab dance.</p>
-      <p class="stack">Swift &middot; AppKit/SwiftUI &middot; ScreenCaptureKit &middot; iTerm2 API</p>
-    </div>
+      <div class="panels" id="panels">
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://kiddyproof.app">kiddyproof</a></span>
-        <span class="status">Live</span>
-      </div>
-      <p class="desc">Hand the keyboard to a small child without touching your real work. One shortcut drops a transparent &ldquo;kid mode&rdquo; cage: your desktop stays visible and untouched, every keypress and click is swallowed before it reaches any app, and the input drives calm, glowing visual feedback instead. Only a deliberate parent gesture exits.</p>
-      <p class="stack">Swift &middot; AppKit &middot; CGEventTap &middot; Core Graphics</p>
-    </div>
+        <article class="panel" id="panel-telebrain" data-name="TeleBrain.ai" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://telebrain.ai">TeleBrain.ai</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">A local-first knowledge base for your Telegram chats. Citation-backed search, topic synthesis, and a desktop app. Your data stays on your machine.</p>
+          <p class="stack">Python &middot; SQLite/FTS &middot; FastAPI &middot; React &middot; Tauri</p>
+        </article>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://groundtruther.io">GroundTruther</a></span>
-        <span class="status">Live</span>
-      </div>
-      <p class="desc">A marketplace where AI agents hire humans for physical-world tasks. Agents post tasks via API, workers claim nearby ones on web or mobile, submit proof, and get paid through escrow. Includes an MCP server so Claude itself can be the employer.</p>
-      <p class="stack">Django &middot; PostGIS &middot; Celery &middot; React &middot; SwiftUI &middot; Stripe</p>
-    </div>
+        <article class="panel" id="panel-snippai" data-name="SnippAI" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://snippai.dev">SnippAI</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">Screenshot straight into your running Claude Code session. A native macOS menu-bar app: capture a region, pick a live terminal session, and send image&nbsp;+&nbsp;message in one step. No alt-tab dance.</p>
+          <p class="stack">Swift &middot; AppKit/SwiftUI &middot; ScreenCaptureKit &middot; iTerm2 API</p>
+        </article>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://coinmountain.io">CoinMountain</a></span>
-        <span class="status">Live</span>
-      </div>
-      <p class="desc">Who is king? A pay-to-rank leaderboard for crypto coins. Bid in USDC/USDT on Solana; highest total bid holds the summit until someone outbids it. No smart contract, no custodian &mdash; payments verified directly on-chain.</p>
-      <p class="stack">Cloudflare Workers &middot; D1 &middot; Solana RPC &middot; vanilla JS</p>
-    </div>
+        <article class="panel" id="panel-kiddyproof" data-name="kiddyproof" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://kiddyproof.app">kiddyproof</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">One shortcut drops a transparent &ldquo;kid mode&rdquo; cage over your desktop: every keypress and click is swallowed before it reaches any app and turned into calm, glowing feedback instead. Only a deliberate parent gesture exits.</p>
+          <p class="stack">Swift &middot; AppKit &middot; CGEventTap &middot; Core Graphics</p>
+        </article>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://landrush.vip">landrush</a></span>
-        <span class="status">Live</span>
-      </div>
-      <p class="desc">Texas tax-sale land research. Aggregates county tax-foreclosure listings, enriches every parcel from its appraisal district, and answers plain-English questions &mdash; &ldquo;land over 10 acres, minimum bid under $10k, near Dallas&rdquo; &mdash; with a map, the filters it understood, and a how-to-buy checklist per parcel.</p>
-      <p class="stack">Python &middot; FastAPI &middot; PostgreSQL/PostGIS &middot; SQLAlchemy</p>
-    </div>
+        <article class="panel" id="panel-groundtruther" data-name="GroundTruther" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://groundtruther.io">GroundTruther</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">A marketplace where AI agents hire humans for physical-world tasks. Agents post tasks via API, workers claim nearby ones on web or mobile, submit proof, and get paid through escrow. Includes an MCP server so Claude itself can be the employer.</p>
+          <p class="stack">Django &middot; PostGIS &middot; Celery &middot; React &middot; SwiftUI &middot; Stripe</p>
+        </article>
 
-    <div class="project">
-      <div class="head">
-        <span class="name"><a href="https://skusmithy.com">SKUsmith</a></span>
-        <span class="status">Live</span>
+        <article class="panel" id="panel-coinmountain" data-name="CoinMountain" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://coinmountain.io">CoinMountain</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">Who is king? A pay-to-rank leaderboard for crypto coins. Bid in USDC/USDT on Solana; highest total bid holds the summit until someone outbids it. No smart contract, no custodian: payments are verified directly on-chain.</p>
+          <p class="stack">Cloudflare Workers &middot; D1 &middot; Solana RPC &middot; vanilla JS</p>
+        </article>
+
+        <article class="panel" id="panel-landrush" data-name="landrush" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://landrush.vip">landrush</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">Texas tax-sale land research. Ask in plain English &mdash; &ldquo;land over 10 acres, minimum bid under $10k, near Dallas&rdquo; &mdash; and get a map, the filters it understood, and a how-to-buy checklist per parcel.</p>
+          <p class="stack">Python &middot; FastAPI &middot; PostgreSQL/PostGIS &middot; SQLAlchemy</p>
+        </article>
+
+        <article class="panel" id="panel-skusmith" data-name="SKUsmith" data-status="Live">
+          <div class="head">
+            <span class="name"><a href="https://skusmithy.com">SKUsmith</a></span>
+            <span class="status">Live</span>
+          </div>
+          <p class="desc">PIM/DAM for wholesale distributors. Ingests messy ERP exports and photo dumps, cleans them with AI under human confirmation, and ships dealer packs and marketplace feeds, every value traceable to its source cell.</p>
+          <p class="stack">FastAPI &middot; SQLite &middot; React &middot; Claude</p>
+        </article>
+
       </div>
-      <p class="desc">PIM/DAM for small and mid-size wholesale distributors. Ingests messy ERP exports and photo dumps, cleans them with AI under human confirmation, and ships dealer packs, store CSVs, and marketplace feeds &mdash; every value traceable back to the cell it came from.</p>
-      <p class="stack">FastAPI &middot; SQLite &middot; React &middot; Claude</p>
     </div>
   </section>
 
@@ -238,5 +394,202 @@
     Built by a robot.
   </footer>
 </main>
+
+<script>
+(function () {
+  'use strict';
+
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var N = panels.length;
+  if (!N) return;
+
+  var SLOTS = N * 2;                 // two copies fill the cylinder completely
+  var STEP = 360 / SLOTS;            // degrees between slats
+  var RADIUS = 108;                  // px; keeps ~44px chord between slats
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var drum = document.getElementById('drum');
+  var panelsBox = document.getElementById('panels');
+  var hint = document.getElementById('drum-hint');
+  hint.hidden = false;
+
+  // Build slats: first N are real options, second N are visual duplicates.
+  var slats = [];
+  for (var s = 0; s < SLOTS; s++) {
+    var p = s % N;
+    var el = document.createElement('div');
+    if (s < N) {
+      el.setAttribute('role', 'option');
+      el.id = 'opt-' + panels[p].id.replace(/^panel-/, '');
+      panels[p].setAttribute('aria-labelledby', el.id);
+    } else {
+      el.setAttribute('aria-hidden', 'true');
+    }
+    el.className = 'slat';
+    el.innerHTML = '<span class="slat-name"></span><span class="slat-status"></span>';
+    el.firstChild.textContent = panels[p].dataset.name;
+    el.lastChild.textContent = panels[p].dataset.status;
+    el.dataset.slot = s;
+    drum.appendChild(el);
+    slats.push(el);
+  }
+
+  // Size the column to the active card; the height transition rides the crossfade.
+  function sizePanels() {
+    if (activeProject < 0) return;
+    panelsBox.style.height = panels[activeProject].offsetHeight + 'px';
+  }
+  window.addEventListener('resize', sizePanels);
+  window.addEventListener('load', sizePanels);
+
+  // Rotation state. R is unbounded; slot k sits at angle k*STEP - R.
+  var R = 0, targetR = 0, velocity = 0;
+  var activeSlot = 0, activeProject = -1;
+  var dragging = false, freewheel = false;
+
+  function wrap180(a) { a = ((a + 180) % 360 + 360) % 360; return a - 180; }
+
+  function render() {
+    for (var s = 0; s < SLOTS; s++) {
+      var ang = wrap180(s * STEP - R);
+      var el = slats[s];
+      var rad = ang * Math.PI / 180;
+      var c = Math.cos(rad);
+      if (c < 0.08) {
+        el.style.visibility = 'hidden';
+        continue;
+      }
+      el.style.visibility = '';
+      el.style.transform = 'rotateX(' + (-ang) + 'deg) translateZ(' + RADIUS + 'px)';
+      el.style.opacity = (0.45 + 0.55 * Math.pow(c, 1.6)).toFixed(3);
+      el.style.zIndex = Math.round(c * 100);
+      el.classList.toggle('front', s === ((activeSlot % SLOTS) + SLOTS) % SLOTS);
+    }
+  }
+
+  function setActiveProject(project) {
+    if (project === activeProject) return;
+    activeProject = project;
+    drum.setAttribute('aria-activedescendant', slats[project].id);
+    panels.forEach(function (pnl, i) {
+      var on = i === project;
+      pnl.classList.toggle('active', on);
+      slats[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      pnl.querySelectorAll('a').forEach(function (a) { a.tabIndex = on ? 0 : -1; });
+    });
+    sizePanels();
+  }
+
+  function setActiveFromR() {
+    activeSlot = Math.round((dragging || freewheel ? R : targetR) / STEP);
+    setActiveProject(((activeSlot % N) + N) % N);
+  }
+
+  var rafId = null, lastTick = 0;
+  function tick(now) {
+    rafId = null;
+    var dt = Math.min(Math.max((now - (lastTick || now)) / 1000, 0.001), 0.1);
+    lastTick = now;
+    if (!dragging && !freewheel) {
+      var diff = targetR - R;
+      if (Math.abs(diff) < 0.05) {
+        R = targetR;
+        lastTick = 0;
+      } else {
+        // time-based exponential ease toward the snapped slot
+        R = targetR - diff * Math.exp(-9 * dt);
+        schedule();
+      }
+    }
+    setActiveFromR();
+    render();
+  }
+  function schedule() { if (rafId === null) rafId = requestAnimationFrame(tick); }
+
+  function snapTo(slot, instant) {
+    targetR = slot * STEP;
+    if (instant || reduceMotion) { R = targetR; velocity = 0; }
+    freewheel = false;
+    // state updates synchronously; rAF only animates the motion
+    setActiveFromR();
+    render();
+    schedule();
+  }
+
+  // Rotate toward a given project by the shortest path.
+  function goToProject(project) {
+    var current = Math.round(R / STEP);
+    var delta = ((project - current) % N + N) % N;
+    if (delta > N / 2) delta -= N;
+    snapTo(current + delta);
+  }
+
+  // --- pointer drag ---
+  var lastY = 0, lastT = 0, movedPx = 0, downSlat = null;
+  drum.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    movedPx = 0;
+    downSlat = e.target.closest('.slat');
+    lastY = e.clientY;
+    lastT = performance.now();
+    velocity = 0;
+    drum.classList.add('grabbing');
+    drum.setPointerCapture(e.pointerId);
+  });
+  drum.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dy = e.clientY - lastY;
+    movedPx += Math.abs(dy);
+    var now = performance.now();
+    var dR = -dy * (57.3 / RADIUS) * 1.15;
+    R += dR;
+    velocity = dR / Math.max(now - lastT, 1) * 16;
+    lastY = e.clientY;
+    lastT = now;
+    schedule();
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    drum.classList.remove('grabbing');
+    // a press that never moved is a pick, not a throw
+    if (e.type === 'pointerup' && movedPx <= 6 && downSlat) {
+      goToProject(Number(downSlat.dataset.slot) % N);
+    } else {
+      var thrown = reduceMotion ? 0 : velocity * 6;
+      snapTo(Math.round((R + thrown) / STEP));
+    }
+    downSlat = null;
+  }
+  drum.addEventListener('pointerup', endDrag);
+  drum.addEventListener('pointercancel', endDrag);
+
+  // --- wheel: freewheel, then snap shortly after the last notch ---
+  var wheelTimer = null;
+  drum.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    freewheel = true;
+    var dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 120 : 1);
+    R += dy * 0.12;
+    schedule();
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(function () { snapTo(Math.round(R / STEP)); }, 140);
+  }, { passive: false });
+
+  // --- keyboard on the tablist ---
+  drum.addEventListener('keydown', function (e) {
+    var delta = 0;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') delta = 1;
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') delta = -1;
+    else if (e.key === 'Home') { goToProject(0); e.preventDefault(); return; }
+    else if (e.key === 'End') { goToProject(N - 1); e.preventDefault(); return; }
+    else return;
+    e.preventDefault();
+    snapTo(Math.round(R / STEP) + delta);
+  });
+
+  snapTo(0, true);
+})();
+</script>
 </body>
 </html>
